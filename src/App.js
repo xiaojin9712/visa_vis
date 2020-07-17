@@ -1,25 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useContext, useEffect } from "react";
+import { ThemeProvider } from "@material-ui/core/styles";
+import theme from "./theme";
+
+import TimeCurve from "./components/timeCurve";
+import Timeline from "./components/timeline";
+import Line from "./components/smallMultiplesLayout";
+import Lines from "./components/lineLayout";
+import Panel from "./components/panels";
+import TimeCurveSmallLayout from "./components/smalTimeCurveLayout";
+import TimeCurveViewPanel from "./components/overviewPanel";
+
+import Configuration from "./components/configurationPanel";
+
+import { OptionContext } from "./context/index";
+import { useConfig } from "./context/hook";
+import style from "./style.module.css";
 
 function App() {
+  const color = useConfig();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <div className="App">
+        <OptionContext.Provider value={color}>
+          <div className={style.container}>
+            <div className={style.configuration}>
+              <Configuration />
+              <Timeline />
+            </div>
+            <div className={style.center}>
+              {/* <Lines /> */}
+              <TimeCurve />
+              <Panel />
+              {/* <Line /> */}
+            </div>
+            <div className={style.timePanel}>
+              <TimeCurveSmallLayout />
+              <TimeCurveViewPanel />
+            </div>
+          </div>
+        </OptionContext.Provider>
+      </div>
+    </ThemeProvider>
   );
 }
 

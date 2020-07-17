@@ -1,0 +1,14 @@
+.timeline p {
+  font-size: 14px;
+  padding-left: 20px;
+}
+
+.timeline p span {
+  background-color: #fd486e;
+  color: #fff;
+  padding: 8px;
+}
+
+.timeline {
+  width: 100%;
+}
