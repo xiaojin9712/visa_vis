@@ -35,7 +35,7 @@
 }
 
 .timecurve {
-  border: 1px solid #391d71;
+  border: 1px dashed #391d71;
 }
 .tc-item {
   border: 1px dashed #666;
@@ -51,7 +51,7 @@
   font-size: 14px;
 }
 
-.movepath {
+/* .movepath {
   animation: dash 3s linear forwards;
 }
 
@@ -59,4 +59,4 @@
   to {
     stroke-dashoffset: 0;
   }
-}
+} */

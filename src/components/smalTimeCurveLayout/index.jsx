@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Popover } from "@material-ui/core";
 import TimeCurve from "../timeCurveSmall";
-import data from "../../data/0713.json";
+import data from "../../data/0722_2.json";
+import weather from "../../data/0722_weather.json";
 import * as d3 from "d3";
 import style from "./style.module.css";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -14,7 +15,6 @@ function App() {
 
   useEffect(() => {
     // console.clear();
-    console.log("data", data);
     // d3.json("./0712.json").then((d) => {
     //   console.clear();
     //   console.log("k", d);
@@ -30,33 +30,33 @@ function App() {
     "2018-03-05",
     "2018-03-06",
     "2018-03-07",
-    // "2018-03-08",
-    // "2018-03-09",
-    // "2018-03-10",
-    // "2018-03-11",
-    // "2018-03-12",
-    // "2018-03-13",
-    // "2018-03-14",
-    // "2018-03-15",
-    // "2018-03-16",
-    // "2018-03-17",
-    // "2018-03-18",
-    // "2018-03-19",
-    // "2018-03-20",
-    // "2018-03-21",
-    // "2018-03-22",
-    // "2018-03-23",
-    // "2018-03-24",
-    // "2018-03-25",
-    // "2018-03-26",
-    // "2018-03-27",
-    // "2018-03-28",
-    // "2018-03-29",
-    // "2018-03-30",
-    // "2018-03-31",
+    "2018-03-08",
+    "2018-03-09",
+    "2018-03-10",
+    "2018-03-11",
+    "2018-03-12",
+    "2018-03-13",
+    "2018-03-14",
+    "2018-03-15",
+    "2018-03-16",
+    "2018-03-17",
+    "2018-03-18",
+    "2018-03-19",
+    "2018-03-20",
+    "2018-03-21",
+    "2018-03-22",
+    "2018-03-23",
+    "2018-03-24",
+    "2018-03-25",
+    "2018-03-26",
+    "2018-03-27",
+    "2018-03-28",
+    "2018-03-29",
+    "2018-03-30",
+    "2018-03-31",
   ];
 
-  const mccs = ["a", "b", "c", "d", "e", "f", "g", "h", "j", "k"];
+  const mccs = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
 
   function select(day, mcc) {
     setCurrentOption({
@@ -70,36 +70,42 @@ function App() {
     const color = Math.random() * 28 - 8;
     return (
       <div className={style.row}>
-        <div className={`${style.item} ${style.title}`}>{day}</div>
-        {data
-          .filter((d) => {
-            return d.day == day;
-          })
-          .map((d, i) => {
-            return (
-              <div
-                className={style.item}
-                onClick={() => {
-                  console.log(day, mccs[i]);
-                  select(day, mccs[i]);
+        <div
+          className={`${style.item} ${style.title} ${
+            options.selectedDay == day && style.selectedCell
+          }`}
+        >
+          {day}
+        </div>
+        {mccs.map((d) => {
+          return (
+            <div
+              className={`${style.item} ${
+                options.selectedDay == day && options.selectedMcc == d
+                  ? style.selected
+                  : ""
+              }`}
+              onClick={() => {
+                select(day, d);
+              }}
+            >
+              <TimeCurve
+                id={day + d}
+                data={{
+                  m: data[day][d]["mds"],
                 }}
-              >
-                <TimeCurve
-                  id={day + mccs[i]}
-                  data={{
-                    m: d["mds"],
-                  }}
-                  color={color}
-                />
-              </div>
-            );
-          })}
+                record={weather[day]}
+              />
+            </div>
+          );
+        })}
       </div>
     );
   }
 
   return (
-    <div style={{ padding: "24px" }}>
+    // <div style={{ padding: "24px" }}>
+    <div style={{ paddingLeft: "24px" }}>
       {/* <Popover
         anchorOrigin={{
           vertical: "center",
@@ -113,8 +119,17 @@ function App() {
         The content of the Popover.
       </Popover> */}
       <div className={style.header}>
-        <div className={style.headerItem} style={{ border: "1px solid #666" }}>
-          <Select
+        <div
+          className={style.headerItem}
+          style={
+            {
+              // border: "1px solid #666",
+              // padding: "0 4px",
+              // boxSizing: "border-box",
+            }
+          }
+        >
+          {/* <Select
             labelId="config-year-select-label"
             id="config-year-select"
             value={2018}
@@ -126,14 +141,29 @@ function App() {
           >
             <MenuItem value={2018}>Temperature</MenuItem>
             <MenuItem value={2019}>Wind speed</MenuItem>
-          </Select>
+          </Select> */}
         </div>
+        {mccs.map((d) => {
+          return (
+            <div
+              className={`${style.headerItem} ${
+                options.selectedMcc == d && style.selectedCell
+              }`}
+            >
+              {d}
+            </div>
+          );
+        })}
+        {/*         
         <div className={style.headerItem}>MCC 1</div>
         <div className={style.headerItem}>MCC 1</div>
         <div className={style.headerItem}>MCC 1</div>
         <div className={style.headerItem}>MCC 1</div>
         <div className={style.headerItem}>MCC 1</div>
         <div className={style.headerItem}>MCC 1</div>
+        <div className={style.headerItem}>MCC 1</div>
+        <div className={style.headerItem}>MCC 1</div>
+        <div className={style.headerItem}>MCC 1</div> */}
       </div>
       <div className={style.content}>
         {days.map((i) => {

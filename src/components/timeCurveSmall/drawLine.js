@@ -55,8 +55,8 @@ function drawLine(id, svg, points_data, f, t, x, y) {
   var path = document.getElementById(id);
   var length = path.getTotalLength();
   path.style.color = "red";
-  path.style.strokeDashoffset = length + 1000;
-  path.style.strokeDasharray = length;
+  // path.style.strokeDashoffset = length + 1000;
+  // path.style.strokeDasharray = length;
 }
 
 export default drawLine;

@@ -6,6 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import Upload from "../upload";
 
 import style from "./style.module.css";
 import { OptionContext } from "../../context";
@@ -36,7 +37,7 @@ function ConfigurationPanel() {
   const handleChange = (event) => {
     setConfig({
       ...config,
-      [event.target.name]: [event.target.value],
+      [event.target.name]: event.target.value,
     });
   };
 
@@ -170,16 +171,21 @@ function ConfigurationPanel() {
                   }}
                 >
                   <MenuItem value={"temperature"}>Temperature</MenuItem>
+                  <MenuItem value={"precip1Hour"}>precip1Hour</MenuItem>
+                  <MenuItem value={"windSpeed"}>windSpeed</MenuItem>
                 </Select>
               </FormControl>
             </div>
           )}
         </div>
-        <Grid container spacing={2} justify="flex-end">
+        <Grid
+          container
+          spacing={2}
+          justify="space-between"
+          alignItems="flex-end"
+        >
           <Grid item>
-            <Button color="primary" variant="outlined" size="small">
-              Reset
-            </Button>
+            <Upload />
           </Grid>
           <Grid item>
             <Button
@@ -188,7 +194,7 @@ function ConfigurationPanel() {
               size="small"
               onClick={handleOptionChange}
             >
-              Apply
+              UPDATE
             </Button>
           </Grid>
         </Grid>

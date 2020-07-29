@@ -35,7 +35,8 @@
 }
 
 .timecurve {
-  border: 1px solid #391d71;
+  border: 1px dashed #391d71;
+  background-color: #fff;
 }
 .tc-item {
   border: 1px dashed #666;
@@ -51,7 +52,7 @@
   font-size: 14px;
 }
 
-#path {
+.animation {
   animation: dash 3s linear forwards;
 }
 
@@ -59,4 +60,33 @@
   to {
     stroke-dashoffset: 0;
   }
+}
+
+.show-bg .annotation-note-bg {
+  fill: fuchsia;
+  fill-opacity: 0.05;
+}
+
+.annotation text {
+  fill: #e8336d;
+}
+
+.annotation-connector path,
+.annotation-note path {
+  stroke: #e8336d;
+  fill: none;
+  opacity: 0.2;
+}
+
+.annotation-note {
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+.highlight path {
+  opacity: 1;
+  stroke-width: 2;
 }

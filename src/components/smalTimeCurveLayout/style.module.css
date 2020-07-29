@@ -6,7 +6,7 @@
 
 .headerItem {
   height: 24px;
-  width: 100px;
+  width: 72px;
   font-size: 12px;
   color: #666;
   text-align: center;
@@ -20,8 +20,8 @@
   justify-content: flex-start;
 }
 .row .item {
-  width: 100px;
-  height: 100px;
+  width: 72px;
+  height: 72px;
   /* background-color: blue; */
   box-sizing: border-box;
   border: 1px solid transparent;
@@ -29,16 +29,25 @@
 }
 
 .row .item:hover {
-  border-color: #fd486e;
+  border-color: #391d71;
   cursor: pointer;
 }
 
+.row .selected {
+  border-color: #391d71;
+}
+
 .title {
-  font-size: 12px;
+  font-size: 10px;
   color: #666;
   text-align: center;
-  line-height: 100px;
+  line-height: 72px;
   text-decoration: underline;
   text-decoration-color: #391d71;
   text-decoration-thickness: 4px;
+}
+
+.selectedCell {
+  background-color: #391d71;
+  color: #fff;
 }

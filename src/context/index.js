@@ -7,6 +7,11 @@ const optionsContext = {
     selectedPoint: 1,
     selectedDay: "2018-03-01",
     selectedMcc: "a",
+    city: "Reading",
+    timeMode: "year",
+    indicator: "weather",
+    mcc: "travel",
+    weather: "temperature",
   },
   setCurrentOption: () => {},
 };

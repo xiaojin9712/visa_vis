@@ -3,9 +3,19 @@ import * as d3 from "d3";
 import "./style.css";
 import { OptionContext } from "../../context";
 import mds from "../../utilities/mds";
+import drawLine from "./drawLine";
+
+function makeColorInterpolation(min, max, colors) {
+  let color = d3
+    .scaleLinear()
+    .domain([min, 0, max])
+    .range(colors)
+    .interpolate(d3.interpolateHcl);
+
+  return color;
+}
 
 //Functions
-import drawLine from "./drawLine";
 
 function TimeCurve(props) {
   const { options, setCurrentOption } = useContext(OptionContext);
@@ -14,13 +24,13 @@ function TimeCurve(props) {
   const [rough, setRough] = useState(1);
   const data = props.data;
   const id = props.id;
-  const bgc = props.color;
+  const record = props.record;
 
   useEffect(() => {
     if (d3Container.current) {
       Init();
     }
-  }, [d3Container, flat, rough]);
+  }, [d3Container, flat, rough, options.weather]);
   function Init() {
     let MARGIN,
       enter_points,
@@ -44,13 +54,48 @@ function TimeCurve(props) {
     width = svgEl.node().getBoundingClientRect().width;
 
     height = svgEl.node().getBoundingClientRect().height;
-    var colors = d3
-      .scaleQuantize()
-      .domain([-8, 20])
-      .range(["#fba23f", "#fc4646"]);
-    svgEl.style("background", colors(bgc));
+    switch (options.weather) {
+      case "temperature":
+        var colors = makeColorInterpolation(-10, 30, [
+          "#3d8bff",
+          "#fff",
+          "#e60b09",
+        ]);
+        svgEl.style("background", colors(record.med_tmp));
+        break;
+      case "precip1Hour":
+        var colors = makeColorInterpolation(0, 0.5, [
+          "#03045eff",
+          "#023e8aff",
+          "#0077b6ff",
+          "#0096c7ff",
+          "#00b4d8ff",
+          "#48cae4ff",
+          "#90e0efff",
+          "#ade8f4ff",
+          "#caf0f8ff",
+        ]);
+        svgEl.style("background", colors(record.med_pre));
+        break;
+      case "windSpeed":
+        var colors = makeColorInterpolation(10, 30, [
+          "#10002bff",
+          "#240046ff",
+          "#3c096cff",
+          "#5a189aff",
+          "#7b2cbfff",
+          "#9d4eddff",
+          "#c77dffff",
+          "#e0aaffff",
+        ]);
+        console.log("f", id, record.med_win);
+        svgEl.style("background", colors(record.med_win));
+        break;
+      default:
+        break;
+    }
 
-    MARGIN = 20;
+    MARGIN = 8;
     let keys = [
       "t1",
       "t2",
@@ -123,24 +168,6 @@ function TimeCurve(props) {
       return (links_data = links_data.concat(array));
     });
 
-    // links = svg.selectAll(".link").data(links_data);
-    // let enter_links = links
-    //   .enter()
-    //   .append("line")
-    //   .attr("class", "link")
-    //   .attr("x1", function (d) {
-    //     return x(d.source[0]);
-    //   })
-    //   .attr("y1", function (d) {
-    //     return y(d.source[1]);
-    //   })
-    //   .attr("x2", function (d) {
-    //     return x(d.target[0]);
-    //   })
-    //   .attr("y2", function (d) {
-    //     return y(d.target[1]);
-    //   });
-
     drawLine(id, svg, points_data, flat, rough, x, y);
 
     points = svg.selectAll(".point").data(points_data);
@@ -156,84 +183,13 @@ function TimeCurve(props) {
     enter_points.append("circle").attr("r", 2).attr("opacity", 0.3);
 
     enter_points.append("circle").attr("r", 1);
-
-    // enter_points
-    //   .append("text")
-    //   .text(function (d, i) {
-    //     return keys[i];
-    //   })
-    //   .attr("y", 12)
-    //   .attr("dy", "0.35em");
-
-    // enter_points.append("title").text(function (d, i) {
-    //   return d[0] + ", " + d[1];
-    // });
-
-    // indicators = svg.selectAll(".indicator").data(links_data);
-
-    // let enter_indicators = indicators
-    //   .enter()
-    //   .append("circle")
-    //   .attr("class", "indicator")
-    //   .attr("r", 5)
-
-    //   .attr("cx", function (d) {
-    //     var mul;
-    //     mul =
-    //       d.dist /
-    //       Math.sqrt(
-    //         Math.pow(d.target[1] - d.source[1], 2) +
-    //           Math.pow(d.target[0] - d.source[0], 2)
-    //       );
-    //     return x(d.source[0]) + mul * (x(d.target[0]) - x(d.source[0]));
-    //   })
-
-    //   .attr("cy", function (d) {
-    //     var mul;
-    //     mul =
-    //       d.dist /
-    //       Math.sqrt(
-    //         Math.pow(d.target[1] - d.source[1], 2) +
-    //           Math.pow(d.target[0] - d.source[0], 2)
-    //       );
-    //     return y(d.source[1]) + mul * (y(d.target[1]) - y(d.source[1]));
-    //   });
-
-    // enter_points.on("click", function (d, i) {
-    // setCurrentOption({
-    //   ...options,
-    //   selectedPoint: i,
-    // });
-    // enter_links.classed("visible", function (l) {
-    //   return l.source === d;
-    // });
-    // return enter_indicators.classed("visible", function (l) {
-    //   return l.source === d;
-    // });
-    // });
-
-    // svg
-    //   .append("line")
-    //   .attr("class", "link visible")
-    //   .attr("x1", 0)
-    //   .attr("y1", height / 2)
-    //   .attr("x2", width)
-    //   .attr("y2", height / 2);
-
-    // svg
-    //   .append("line")
-    //   .attr("class", "link visible xa")
-    //   .attr("x1", width / 2)
-    //   .attr("y1", 0)
-    //   .attr("x2", width / 2)
-    //   .attr("y2", height);
   }
   return (
     <div className="timeCurve">
       <svg
         className="timecurvesmall"
-        width={100}
-        height={100}
+        width={72}
+        height={72}
         ref={d3Container}
       />
     </div>

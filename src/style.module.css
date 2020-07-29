@@ -1,3 +1,7 @@
+.App {
+  height: 100vh;
+  overflow: hidden;
+}
 .configuration {
   display: flex;
   justify-content: space-between;
@@ -9,8 +13,20 @@
   padding: 24px;
 }
 .container {
-  max-height: 100vh;
+  height: 100vh;
   overflow: scroll;
+  display: flex;
+}
+.left {
+  padding-right: 24px;
+}
+.right {
+  flex: 1;
+  /* background-color: #391d71; */
+  border-left: 1px solid #391d71;
+  position: sticky;
+  top: 0;
+  right: 0;
 }
 .timePanel {
   display: flex;

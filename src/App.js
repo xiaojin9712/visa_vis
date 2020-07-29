@@ -20,23 +20,26 @@ function App() {
   const color = useConfig();
   return (
     <ThemeProvider theme={theme}>
-      <div className="App">
+      <div className={style.App}>
         <OptionContext.Provider value={color}>
           <div className={style.container}>
-            <div className={style.configuration}>
-              <Configuration />
-              <Timeline />
+            <div className={style.left}>
+              <div className={style.configuration}>
+                <Configuration />
+                {/* <Timeline /> */}
+              </div>
+              <div className={style.overview}>
+                <TimeCurveSmallLayout />
+              </div>
             </div>
-            <div className={style.center}>
-              {/* <Lines /> */}
-              <TimeCurve />
-              <Panel />
-              {/* <Line /> */}
-            </div>
-            <div className={style.timePanel}>
-              <TimeCurveSmallLayout />
+            <div className={style.right}>
               <TimeCurveViewPanel />
             </div>
+
+            {/* <div className={style.timePanel}>
+              <TimeCurveSmallLayout />
+              <TimeCurveViewPanel />
+            </div> */}
           </div>
         </OptionContext.Provider>
       </div>

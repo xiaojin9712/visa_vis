@@ -6,16 +6,18 @@ import { OptionContext } from "../../context";
 function Timeline(props) {
   const { options, setCurrentOption } = useContext(OptionContext);
   const d3Container = useRef(null);
+  const data = props.data;
+  const id = props.id;
 
   async function Init() {
-    const data = props.data;
     let margin = {
       top: 20,
       bottom: 20,
       left: 30,
-      right: 30,
+      right: 20,
     };
     let svg = d3.select(d3Container.current);
+    svg.html("");
 
     let width = svg.node().getBoundingClientRect().width;
 
@@ -39,7 +41,12 @@ function Timeline(props) {
     let yAxis = (g) =>
       g
         .attr("transform", `translate(${margin.left},0)`)
-        .call(d3.axisLeft(y).ticks(width / 80))
+        .call(
+          d3
+            .axisLeft(y)
+            .ticks(width / 80)
+            .tickFormat(d3.format(".0s"))
+        )
         .call((g) => g.select(".domain").remove())
         .call((g) =>
           g
@@ -90,12 +97,12 @@ function Timeline(props) {
     if (d3Container.current) {
       Init();
     }
-  }, [d3Container]);
+  }, [d3Container, id]);
 
   return (
     <div className="small">
       <svg className="d3-small" width={120} height={120} ref={d3Container} />
-      <p>{props.date}</p>
+      <p className="lineLabel">{props.label}</p>
     </div>
   );
 }

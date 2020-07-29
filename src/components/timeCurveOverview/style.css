@@ -35,7 +35,7 @@
 }
 
 .timecurve {
-  border: 1px solid #391d71;
+  border: 1px dashed #391d71;
 }
 .tc-item {
   border: 1px dashed #666;

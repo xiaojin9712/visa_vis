@@ -1,0 +1,19 @@
+#load .MuiDropzoneArea-root {
+  min-height: 48px;
+  border: 1px dashed #333;
+  border-radius: 0;
+}
+
+#load .MuiDropzoneArea-text {
+  margin: 8px;
+  font-size: 12px;
+  color: #666;
+  text-align: left;
+  line-height: 48px;
+}
+
+#load .MuiDropzoneArea-icon {
+  width: 24px;
+  height: 24px;
+  display: none;
+}

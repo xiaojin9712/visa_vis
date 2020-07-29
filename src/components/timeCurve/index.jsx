@@ -1,26 +1,29 @@
 import React, { useContext, useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
+import * as d3Annotation from "d3-svg-annotation";
 import "./style.css";
 import { OptionContext } from "../../context";
-import data from "../../data/timeCurve_demo";
+// import data from "../../data/timeCurve_demo";
 import mds from "../../utilities/mds";
 import Slider from "@material-ui/core/Slider";
 
 //Functions
 import drawLine from "./drawLine";
 import { Button } from "@material-ui/core";
+import { values } from "d3";
 
 function TimeCurve(props) {
   const { options, setCurrentOption } = useContext(OptionContext);
   const d3Container = useRef(null);
   const [flat, setFlat] = useState(0.3);
   const [rough, setRough] = useState(1);
+  const { data, id, width, height } = props;
 
   useEffect(() => {
     if (d3Container.current) {
       Init();
     }
-  }, [d3Container, flat, rough]);
+  }, [d3Container, flat, rough, id]);
   function Init() {
     let MARGIN,
       enter_points,
@@ -41,28 +44,71 @@ function TimeCurve(props) {
     let svgEl = d3.select(d3Container.current);
     svgEl.html("");
     svg = svgEl.append("g");
+
+    var linearGradient = svg
+      .append("defs")
+      .append("linearGradient")
+      .attr("id", "demoLine")
+      .attr("gradientTransform", "rotate(90)");
+
+    linearGradient
+      .append("stop")
+      .attr("offset", "0%")
+      .attr("stop-color", "#f00");
+
+    linearGradient
+      .append("stop")
+      .attr("offset", "100%")
+      .attr("stop-color", "#fff");
+
     width = svgEl.node().getBoundingClientRect().width;
 
     height = svgEl.node().getBoundingClientRect().height;
 
     MARGIN = 100;
-    let { keys, m } = data;
-    points_data = mds(m);
+    let keys = [
+      "00:20:00",
+      "01:20:00",
+      "02:20:00",
+      "03:20:00",
+      "04:20:00",
+      "05:20:00",
+      "06:20:00",
+      "07:20:00",
+      "08:20:00",
+      "09:20:00",
+      "10:20:00",
+      "11:20:00",
+      "12:20:00",
+      "13:20:00",
+      "14:20:00",
+      "15:20:00",
+      "16:20:00",
+      "17:20:00",
+      "18:20:00",
+      "19:20:00",
+      "20:20:00",
+      "21:20:00",
+      "22:20:00",
+      "23:20:00",
+    ];
+    let { m, v } = data;
+    points_data = mds(m, 2);
+    console.log("lets see", points_data);
+    // svgEl.call(
+    //   d3
+    //     .zoom()
+    //     .extent([
+    //       [0, 0],
+    //       [width, height],
+    //     ])
+    //     .scaleExtent([1, 2])
+    //     .on("zoom", zoomed)
+    // );
 
-    svgEl.call(
-      d3
-        .zoom()
-        .extent([
-          [0, 0],
-          [width, height],
-        ])
-        .scaleExtent([1, 2])
-        .on("zoom", zoomed)
-    );
-
-    function zoomed() {
-      svg.attr("transform", d3.event.transform);
-    }
+    // function zoomed() {
+    //   svg.attr("transform", d3.event.transform);
+    // }
 
     min_x = d3.min(points_data, function (d) {
       return d[0];
@@ -125,7 +171,7 @@ function TimeCurve(props) {
         return y(d.target[1]);
       });
 
-    drawLine(svg, points_data, flat, rough, x, y);
+    drawLine(svg, points_data, flat, rough, x, y, id);
 
     points = svg.selectAll(".point").data(points_data);
 
@@ -137,17 +183,25 @@ function TimeCurve(props) {
         return "translate(" + x(d[0]) + "," + y(d[1]) + ")";
       });
 
-    enter_points.append("circle").attr("r", 6).attr("opacity", 0.3);
-
-    enter_points.append("circle").attr("r", 4);
-
     enter_points
-      .append("text")
-      .text(function (d, i) {
-        return keys[i];
+      .append("circle")
+      .attr("r", (d, i) => {
+        return v[keys[i]] * 6 + 2;
       })
-      .attr("y", 12)
-      .attr("dy", "0.35em");
+      .attr("stroke", "black")
+      .attr("fill", (d, i) => {
+        return "rgba(255,204,0, " + v[keys[i]] + ")";
+      });
+
+    // enter_points.append("circle").attr("r", 4);
+
+    // enter_points
+    //   .append("text")
+    //   .text(function (d, i) {
+    //     return keys[i];
+    //   })
+    //   .attr("y", 12)
+    //   .attr("dy", "0.35em");
 
     enter_points.append("title").text(function (d, i) {
       return d[0] + ", " + d[1];
@@ -196,25 +250,85 @@ function TimeCurve(props) {
       // });
     });
 
-    // svg
-    //   .append("line")
-    //   .attr("class", "link visible")
-    //   .attr("x1", 0)
-    //   .attr("y1", height / 2)
-    //   .attr("x2", width)
-    //   .attr("y2", height / 2);
+    // const annotations = [
+    //   {
+    //     note: { label: "Hiuiuiuiui" },
+    //     x: 200,
+    //     y: 200,
+    //     ny: 300,
+    //     nx: 200,
+    //     subject: { radius: 50, radiusPadding: 10 },
+    //   },
+    // ];
 
-    // svg
-    //   .append("line")
-    //   .attr("class", "link visible xa")
-    //   .attr("x1", width / 2)
-    //   .attr("y1", 0)
-    //   .attr("x2", width / 2)
-    //   .attr("y2", height);
+    const LABEL_MARGIN = 40;
+    let x_label = d3
+      .scaleLinear()
+      .domain([0, 23])
+      .range([LABEL_MARGIN, width - LABEL_MARGIN]);
+
+    let labels = svg.selectAll(".rect").data(keys);
+    labels
+      .enter()
+      .append("rect")
+      .attr("x", (d, i) => {
+        return x_label(i);
+      })
+      .attr("y", (d, i) => {
+        return height - LABEL_MARGIN;
+      })
+      .attr("width", (width - LABEL_MARGIN) / 24 - 5)
+      .attr("height", 20)
+      .attr("fill", "transparent");
+
+    const annotations = points_data.map((d, i) => {
+      return {
+        note: {
+          padding: 5,
+          title: keys[i].substr(0, 2),
+        },
+        x: x(d[0]),
+        y: y(d[1]),
+        nx: x_label(i) + 5,
+        ny: height - LABEL_MARGIN,
+        className: "show-bg",
+        connector: { end: "arrow", curve: d3.curveBasis, points: 2 },
+        subject: { radius: 20, radiusPadding: 10 },
+      };
+    });
+
+    const makeAnnotations = d3Annotation
+      .annotation()
+      // .editMode(true)
+      .type(d3Annotation.annotationCalloutCurve)
+      .annotations(annotations)
+      // .on("noteover", function (annotation) {
+      //   annotation.type.a
+      //     .selectAll("g.annotation-connector, g.annotation-note")
+      //     .classed("highlight", true);
+      // })
+      // .on("noteout", function (annotation) {
+      //   annotation.type.a
+      //     .selectAll("g.annotation-connector, g.annotation-note")
+      //     .classed("highlight", false);
+      // })
+      .on("noteclick", function (annotation) {
+        annotation.type.a
+          .selectAll("g.annotation-connector, g.annotation-note")
+          .classed("highlight", true);
+      });
+    svgEl
+      .append("g")
+      .attr("class", "annotation-group")
+      .style("font-size", "0.6rem")
+      .call(makeAnnotations);
+    svgEl
+      .selectAll("g.annotation-connector, g.annotation-note")
+      .classed("highlight", false);
   }
   return (
     <div className="timeCurve">
-      <div className="tc-config">
+      {/* <div className="tc-config">
         <div className="tc-item">
           <p>
             <span>F: </span>
@@ -254,8 +368,13 @@ function TimeCurve(props) {
         <Button color="primary" variant="contained" size="small" onClick={Init}>
           Reset
         </Button>
-      </div>
-      <svg className="timecurve" width={800} height={450} ref={d3Container} />
+      </div> */}
+      <svg
+        className="timecurve"
+        width={width}
+        height={height}
+        ref={d3Container}
+      />
     </div>
   );
 }
