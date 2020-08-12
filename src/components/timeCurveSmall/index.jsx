@@ -56,7 +56,7 @@ function TimeCurve(props) {
     height = svgEl.node().getBoundingClientRect().height;
     switch (options.weather) {
       case "temperature":
-        var colors = makeColorInterpolation(-10, 30, [
+        var colors = makeColorInterpolation(-3.5, 10.1, [
           "#3d8bff",
           "#fff",
           "#e60b09",
@@ -64,7 +64,7 @@ function TimeCurve(props) {
         svgEl.style("background", colors(record.med_tmp));
         break;
       case "precip1Hour":
-        var colors = makeColorInterpolation(0, 0.5, [
+        var colors = makeColorInterpolation(0, 0.45, [
           "#03045eff",
           "#023e8aff",
           "#0077b6ff",
@@ -78,7 +78,7 @@ function TimeCurve(props) {
         svgEl.style("background", colors(record.med_pre));
         break;
       case "windSpeed":
-        var colors = makeColorInterpolation(10, 30, [
+        var colors = makeColorInterpolation(7, 30, [
           "#10002bff",
           "#240046ff",
           "#3c096cff",

@@ -6,7 +6,7 @@ export const useConfig = () => {
     month: [3, 3],
     selectedPoint: 1,
     selectedDay: "2018-03-01",
-    selectedMcc: "a",
+    selectedMcc: "GROCERY",
     city: "Reading",
     timeMode: "year",
     indicator: "weather",

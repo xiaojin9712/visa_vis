@@ -5,7 +5,7 @@ import { OptionContext } from "../../context/index";
 import style from "./style.module.css";
 
 import { Button } from "@material-ui/core";
-import data from "../../data/0722_2.json";
+import data from "../../data/0730_chisquare.json";
 import weather from "../../data/0722_weather.json";
 import TimeCurve from "../timeCurve";
 import Legend from "../legend";
@@ -297,10 +297,10 @@ function App() {
         />
         <p>Temperature: {options.selectedDay}</p>
       </div> */}
-      <Horizon
+      {/* <Horizon
         id={options.selectedDay + "HorizonW" + options.selectedMcc}
         data={formatWeatherHorizon(options.selectedDay, "windSpeed")}
-      />
+      /> */}
       {/* <Horizon
         id={options.selectedDay + "HorizonW" + options.selectedMcc}
         data={formatWeatherHorizon(options.selectedDay, "windSpeed")}

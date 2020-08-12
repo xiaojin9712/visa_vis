@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Popover } from "@material-ui/core";
 import TimeCurve from "../timeCurveSmall";
-import data from "../../data/0722_2.json";
+import data from "../../data/0730_chisquare.json";
 import weather from "../../data/0722_weather.json";
 import * as d3 from "d3";
 import style from "./style.module.css";
@@ -56,7 +56,19 @@ function App() {
     "2018-03-31",
   ];
 
-  const mccs = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+  // const mccs = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
+  const mccs = [
+    "AIRLINES",
+    "VEHICLE_RENTAL",
+    "LODGING",
+    "GROCERY",
+    "DRUGS",
+    "BAKERIES",
+    "HOSPITALS",
+    "TAX_PAYMENTS",
+    "SCHOOLS",
+    "CAR_WASHES",
+  ];
 
   function select(day, mcc) {
     setCurrentOption({
@@ -149,6 +161,7 @@ function App() {
               className={`${style.headerItem} ${
                 options.selectedMcc == d && style.selectedCell
               }`}
+              title={d}
             >
               {d}
             </div>

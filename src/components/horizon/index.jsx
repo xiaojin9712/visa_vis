@@ -1,7 +1,7 @@
 import React, { useContext, useRef, useEffect, useState } from "react";
 import * as d3 from "d3";
 // import "./style.css";
-import dataSource from "../../data/0722_2.json";
+import dataSource from "../../data/0730_chisquare.json";
 import { OptionContext } from "../../context";
 import Uid from "../../utilities/uid";
 
